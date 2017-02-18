@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find building_mapper)/launch/jackal.launch" />
+
+</launch>
