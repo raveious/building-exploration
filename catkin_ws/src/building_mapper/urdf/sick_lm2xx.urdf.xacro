@@ -1,2 +1,37 @@
 <robot>
+  <link name="sick_lm200-lm291_mount">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://building_mapper/urdf/meshes/SICK_LM200-LM291_MOUNT.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="sick_lm200-lm291_mount_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="sick_lm200-lm291_mount"/>
+    <origin xyz="0.0295 0 0.18" rpy="0 0 0"/>
+  </joint>
+
+  <link name="sick_lm200-lm291">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://building_mapper/urdf/meshes/SICK_LM200-LM291.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.25 0.55 1.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="4.5"/>
+      <inertia ixx="0.3136" ixy="-0.0008" ixz="0.0164" iyy="0.3922" iyz="-0.0009" izz="0.4485"/>
+    </inertial>
+  </link>
+  <joint name="sick_lm2xx_lidar_joint" type="fixed">
+    <parent link="sick_lm200-lm291_mount"/>
+    <child link="sick_lm200-lm291"/>
+    <origin xyz="0.0935 0 0.079" rpy="0 0 0"/>
+  </joint>
 </robot>
