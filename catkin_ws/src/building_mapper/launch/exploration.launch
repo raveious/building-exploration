@@ -1,4 +1,5 @@
 <launch>
   <include file="$(find building_mapper)/launch/jackal.launch" />
 
+  <include file="$(find jackal_navigation)/launch/include/move_base.launch" />
 </launch>
