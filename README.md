@@ -1,7 +1,7 @@
 # Building Exploration
 
 ## Completed Jackal connection Tutorial
-- [ ] [Ian Wakely](https://github.com/raveious) (leader)
+- [x] [Ian Wakely](https://github.com/raveious) (leader)
 - [ ] [Phillip Scramlin](https://github.com/pdscraml)
 - [ ] [Akhil Kurup](https://github.com/amkurup)
 
@@ -14,6 +14,21 @@ $ catkin_init_workspace
 $ cd ..
 $ catkin_make
 $ source devel/setup.bash
+```
+
+## Viewing the robot model
+
+Make sure to source all of setup scripts, this will setup all the paths for your local environment.
+
+```
+$ source catkin_ws/devel/setup.bash
+$ source catkin_ws/remote-jackal.sh
+```
+
+View the model via roslaunch and Rviz
+
+```
+$ roslaunch building_mapper view_model.launch
 ```
 
 ## Connecting to the Jackal
