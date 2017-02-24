@@ -1,0 +1,2 @@
+sicklms/_port: /dev/ttyS0
+sicklms/_baud: 38400
