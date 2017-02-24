@@ -1,2 +1,2 @@
-sicklms/_port: /dev/ttyS0
-sicklms/_baud: 38400
+sicklms/port: /dev/ttyS0
+sicklms/baud: 38400
