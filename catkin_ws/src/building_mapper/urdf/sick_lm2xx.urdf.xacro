@@ -1,5 +1,5 @@
 <robot>
-  <link name="sick_lm200-lm291_mount">
+  <link name="laser_mount">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
       <geometry>
@@ -10,11 +10,11 @@
   </link>
   <joint name="sick_lm200-lm291_mount_joint" type="fixed">
     <parent link="chassis_link"/>
-    <child link="sick_lm200-lm291_mount"/>
+    <child link="laser_mount"/>
     <origin xyz="0.0295 0 0.18" rpy="0 0 0"/>
   </joint>
 
-  <link name="sick_lm200-lm291">
+  <link name="laser">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
       <geometry>
@@ -28,10 +28,31 @@
       <mass value="4.5"/>
       <inertia ixx="0.3136" ixy="-0.0008" ixz="0.0164" iyy="0.3922" iyz="-0.0009" izz="0.4485"/>
     </inertial>
+    <sensor type="ray" name="sick_lm200-lm291">
+      <!-- <update_rate>75</update_rate>
+      <ray>
+        <horizontal>
+          <samples>361</samples>
+          <resolution>1</resolution>
+          <min_angle>{-PI/2}</min_angle>
+          <max_angle>{PI/2}</max_angle>
+        </horizontal>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.001</stddev>
+        </noise>
+      </ray> -->
+    </sensor>
   </link>
   <joint name="sick_lm2xx_lidar_joint" type="fixed">
-    <parent link="sick_lm200-lm291_mount"/>
-    <child link="sick_lm200-lm291"/>
+    <parent link="laser_mount"/>
+    <child link="laser"/>
     <origin xyz="0.0935 0 0.079" rpy="0 0 0"/>
   </joint>
 </robot>
