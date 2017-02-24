@@ -2,8 +2,8 @@
 
 ## Completed Jackal connection Tutorial
 - [x] [Ian Wakely](https://github.com/raveious) (leader)
-- [ ] [Phillip Scramlin](https://github.com/pdscraml)
-- [ ] [Akhil Kurup](https://github.com/amkurup)
+- [x] [Phillip Scramlin](https://github.com/pdscraml)
+- [x] [Akhil Kurup](https://github.com/amkurup)
 
 ## Development
 
