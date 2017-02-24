@@ -1,5 +1,7 @@
 <launch>
-  <include file="$(find building_mapper)/launch/jackal.launch" />
+  <include file="$(find jackal_description)/launch/description.launch">
+    <arg name="config" value="base" />
+  </include>
 
   <param name="use_gui" value="true"/>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find building_mapper)/rviz/view_robot.rviz" />
