@@ -23,19 +23,22 @@ import os
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
+def Callback(data):
+     rospy.loginfo("Callback")
 
 # define setup and run routine
 def init():
-
     # create node for listening to twist messages
-    rospy.init_node("jackal_move")
+    rospy.init_node("building_mapper")
 
     # subscribe to twist_key
     rospy.Subscriber("/scan", LaserScan, Callback)
-    rate = rospy.Rate(user_rate)
+    rate = rospy.Rate(10)
 
     # init Twist msg
     motion = Twist()
+    # publish to cmd_vel of the jackal
+    pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 
     while not rospy.is_shutdown():
 
@@ -45,7 +48,7 @@ def init():
 
         # publish Twist
         pub.publish(motion)
-        pub = rospy.Publisher("/jackal_velocity_controller/cmd_vel", Twist, queue_size=10)
+        # pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 
         rate.sleep()
 
