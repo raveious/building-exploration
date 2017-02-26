@@ -28,22 +28,46 @@ motion = Twist()
 
 # motion algorithm in Callback routine for Jackal motion
 def Callback(data):
-    rospy.loginfo(data.ranges[-10])
+    # len(data.ranges) = 180
+    rospy.loginfo('left: %f  forward: %f  right: %f'%(data.ranges[-5], data.ranges[90], data.ranges[5]))
 
     # move forward
     motion.linear.x  = 0.5
     motion.angular.z = 0.0
 
-    # avoid left wall side
-    if data.ranges[-10] < 0.75 :
-        motion.linear.x  = 0.2
-        motion.angular.z = -0.2
-
     # avoid right wall side
-    if data.ranges[10] < 0.75 :
+    if data.ranges[10] < 1.0 :
         motion.linear.x  = 0.2
         motion.angular.z = 0.2
 
+    # avoid left wall side
+    if data.ranges[-10] < 1.0 :
+        motion.linear.x  = 0.2
+        motion.angular.z = -0.2
+
+    # sharp turn if right side too close
+    if data.ranges[2] < 0.5 :
+        motion.linear.x  = 0.1
+        motion.angular.z = 0.3
+
+    # sharp turn if left side too close
+    if data.ranges[-2] < 0.5 :
+        motion.linear.x  = 0.1
+        motion.angular.z = -0.3
+
+    # slow down if forward wall too close
+    if data.ranges[90] < 1.5 :
+        motion.linear.x  = 0.3
+        motion.angular.z = 0.0
+
+    # stop and turn at forward wall
+    if data.ranges[90] < 1.2 :
+        if data.ranges[10]<data.ranges[-10]:
+            motion.linear.x  = 0.0
+            motion.angular.z = 0.2
+        else:
+            motion.linear.x  = 0.0
+            motion.angular.z = -0.2
 
 # define setup and run routine
 def init():
@@ -53,7 +77,7 @@ def init():
 
     # subscribe to twist_key
     rospy.Subscriber("/scan", LaserScan, Callback)
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(5)
 
     # publish to cmd_vel of the jackal
     pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
@@ -61,8 +85,8 @@ def init():
     while not rospy.is_shutdown():
 
         # push Twist msgs to override Callback algorithm
-        # motion.linear.x = 0.5
-        # motion.angular.z = 0
+        # motion.linear.x = -0.3
+        # motion.angular.z = 0.0
 
         # publish Twist
         pub.publish(motion)
