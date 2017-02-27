@@ -1,4 +1,6 @@
 <launch>
   <include file="$(find building_mapper)/launch/jackal.launch" />
-  
+
+  <node pkg="building_mapper" name="jackal_move" type="jackal_move.py"  output="screen"/>
+
 </launch>
