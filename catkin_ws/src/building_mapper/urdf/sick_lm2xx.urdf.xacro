@@ -29,15 +29,15 @@
       <inertia ixx="0.3136" ixy="-0.0008" ixz="0.0164" iyy="0.3922" iyz="-0.0009" izz="0.4485"/>
     </inertial>
     <sensor type="ray" name="sick_lm200-lm291">
-      <!-- <update_rate>75</update_rate>
+      <update_rate>75</update_rate>
       <ray>
         <horizontal>
-          <samples>361</samples>
+          <samples>181</samples>
           <resolution>1</resolution>
           <min_angle>{-PI/2}</min_angle>
           <max_angle>{PI/2}</max_angle>
         </horizontal>
-        <range>
+        <!-- <range>
           <min>0.10</min>
           <max>30.0</max>
           <resolution>0.01</resolution>
@@ -46,8 +46,8 @@
           <type>gaussian</type>
           <mean>0.0</mean>
           <stddev>0.001</stddev>
-        </noise>
-      </ray> -->
+        </noise> -->
+      </ray>
     </sensor>
   </link>
   <joint name="sick_lm2xx_lidar_joint" type="fixed">
