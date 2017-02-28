@@ -1,5 +1,15 @@
 # Building Exploration
 
+- Teams should develop a URDF model for the LMS200/291. You may assume the mass of the LIDAR to be uniform.
+- Add the URDF model to the Jackal Description.
+- Define an appropriate TF in which to publish 'laser scan' data from the SICK.
+- Use the SICK Toolbox wrapper to publish LIDAR data in this reference frame.
+- Demonstrate operation of the Jackal and LIDAR using rviz.
+- You should assume you will have no Wi-Fi connectivity. Start the Jackal moving randomly or following some pattern for a predefined time.
+- Document your approach, use of the package, and describe your strategy on the github wiki page.
+- Present a map of a floor on the EERC. Include this map on your github wiki page.
+- Demonstrate operation of your mapping program at a TBD location after presentations on March 1.
+
 ## Exploration Algorithms
 
 During the course of this project, we developed two methods of interpreting movements for the Jackal which were both based on the SICK LIDAR lm2xx input. These algorithms are centered around the idea of following a wall around the building.
@@ -45,15 +55,30 @@ View the model via roslaunch and Rviz
 $ roslaunch building_mapper view_model.launch
 ```
 
-## Connecting to the Jackal
+## Exploration with the Jackal
 
-Once the Jackal is powered up and online, setup the ROS master target to the Jackal
+Once the Jackal is powered up and online, ssh into it and launch the exploration nodes.
+
+```
+$ ssh jackal2
+$ cd building-exploration/catkin_ws
+$ git pull
+$ source devel/setup.bash
+$ roslaunch building_mapper exploration.launch
+```
+
+On your local machine, set the ROS master target to the Jackal.
 
 ```
 $ source catkin_ws/remote-jackal.sh jackal2
 ```
 
-This will setup everything up to have all your nodes use Jackal 2 as your master node.
+This will setup everything up to have all your nodes use Jackal 2 as your master node. To view the visualized data from the sensors, use roslaunch on your local machine.
+
+```
+$ source catkin_ws/devel/setup.bash
+$ roslaunch building_mapper view_remote_robot.launch
+```
 
 ## Launch files
 
