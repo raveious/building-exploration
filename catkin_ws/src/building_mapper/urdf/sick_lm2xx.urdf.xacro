@@ -42,12 +42,12 @@
           <min_angle>{-PI/2}</min_angle>
           <max_angle>{PI/2}</max_angle>
         </horizontal>
-        <!-- <range>
+        <range>
           <min>0.10</min>
-          <max>30.0</max>
+          <max>10.0</max>
           <resolution>0.01</resolution>
         </range>
-        <noise>
+        <!-- <noise>
           <type>gaussian</type>
           <mean>0.0</mean>
           <stddev>0.001</stddev>
