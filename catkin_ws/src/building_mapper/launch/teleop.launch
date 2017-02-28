@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find building_mapper)/launch/jackal.launch" />
+
+  <!-- Record rosbag data into the rosbag directory of the building_mapper package -->
+  <node pkg="rosbag" type="record" name="explore_bag" args="-o $(find building_mapper)/rosbag /scan /tf /jackal_velocity_controller/odom"/>
+  
+</launch>
