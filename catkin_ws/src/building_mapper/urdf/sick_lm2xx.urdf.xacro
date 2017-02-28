@@ -1,4 +1,8 @@
 <robot>
+  <material name="blue">
+    <color rgba="0.25 0.55 1.0 1.0"/>
+  </material>
+
   <link name="laser_mount">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
@@ -13,6 +17,9 @@
     <child link="laser_mount"/>
     <origin xyz="0.0295 0 0.18" rpy="0 0 0"/>
   </joint>
+  <gazebo reference="laser_mount">
+    <material name="black"/>
+  </gazebo>
 
   <link name="laser">
     <visual>
@@ -20,13 +27,11 @@
       <geometry>
         <mesh filename="package://building_mapper/urdf/meshes/SICK_LM200-LM291.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="blue">
-        <color rgba="0.25 0.55 1.0 1.0"/>
-      </material>
+      <material name="blue"/>
     </visual>
     <inertial>
       <mass value="4.5"/>
-      <inertia ixx="0.3136" ixy="-0.0008" ixz="0.0164" iyy="0.3922" iyz="-0.0009" izz="0.4485"/>
+      <inertia ixx="0.025664" ixy="0.0" ixz="0.0" iyy="0.018135" iyz="0.0" izz="0.025547"/>
     </inertial>
     <sensor type="ray" name="sick_lm200-lm291">
       <update_rate>75</update_rate>
@@ -55,4 +60,7 @@
     <child link="laser"/>
     <origin xyz="0.0935 0 0.079" rpy="0 0 0"/>
   </joint>
+  <gazebo reference="laser">
+    <material name="blue"/>
+  </gazebo>
 </robot>
