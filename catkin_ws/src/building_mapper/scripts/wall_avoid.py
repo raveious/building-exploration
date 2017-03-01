@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 import rospy
 import math
+import time
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
 class WallAvoid(object):
-    def __init__(self):
+    def __init__(self, timeout=None):
         rospy.init_node("WallAvoid")
 
-        self.turnCoef = [((1.5 * x) ** 2 + 8100) / 10000000.0 for x in range(-90, 0)] + [((-1.5 * x) ** 2 - 8100) / 10000000.0 for x in range(0, 91)]
+        self.turnCoef = [(x ** 2 + 8100) / 10000000.0 for x in range(-90, 0)] + [(x ** 2 - 8100) / 10000000.0 for x in range(0, 91)]
         self.speedCoef = [(-x ** 2 + 8100) / 10000000.0 for x in range(-90,91)]
 
         rospy.Subscriber("/scan", LaserScan, self.latestScan)
@@ -19,9 +20,16 @@ class WallAvoid(object):
         rospy.logdebug(self.turnCoef)
         rospy.logdebug(self.speedCoef)
 
+        self.timeout = None
+        if timeout:
+            self.timeout = time.time() + timeout
+
         rospy.spin()
 
     def latestScan(self, data):
+        if self.timeout <= time.time():
+            rospy.signal_shutdown("Execution timer expired")
+
         turnVal = 0
         speedVal = 0
         for p in range(0, 181):
@@ -38,8 +46,8 @@ class WallAvoid(object):
             turnVal = turnVal + (self.turnCoef[p] * data.ranges[p])
 
         cmd = Twist()
-        cmd.linear.x = min(speedVal, 0.3)
-        cmd.angular.z = -turnVal
+        cmd.linear.x = min(speedVal * 1.1, 0.5)
+        cmd.angular.z = turnVal * -1.2
 
         rospy.loginfo(cmd)
 
@@ -48,6 +56,6 @@ class WallAvoid(object):
 # standard ros boilerplate
 if __name__ == "__main__":
     try:
-        run = WallAvoid()
+        run = WallAvoid(180) # seconds
     except rospy.ROSInterruptException:
         pass
