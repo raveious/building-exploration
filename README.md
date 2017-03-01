@@ -18,8 +18,10 @@ During the course of this project, we developed two methods of interpreting move
 Source: [jackal_move.py](catkin_ws/src/building_mapper/scripts/jackal_move.py)
 
 Uses scan data from the SICK-LMS200 to detect proximity from/to a wall and decide the next step to be taken. 3 major points are scanned: forward (90), left (170) and right (10). If the robot gets close to walls, the left and right points go below 0.9mtr and it turns the other way. If a wall is encountered dead ahead, it scans left and right and makes a decision to turn based on distance from obstacles.
-Advantages: fast
-Disadvantages: crude, follows a zig-zag path, jerks
+
+> Advantages: fast
+
+> Disadvantages: crude, follows a zig-zag path, jerks
 
 ### Continuous Wall Avoidence - by [Ian Wakely](https://github.com/raveious)
 Source: [wall_avoid.py](catkin_ws/src/building_mapper/scripts/wall_avoid.py)
