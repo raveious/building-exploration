@@ -2,6 +2,6 @@
   <include file="$(find building_mapper)/launch/jackal.launch" />
 
   <!-- Record rosbag data into the rosbag directory of the building_mapper package -->
-  <node pkg="rosbag" type="record" name="explore_bag" args="-o $(find building_mapper)/rosbag /scan /tf /jackal_velocity_controller/odom"/>
-  
+  <node pkg="rosbag" type="record" name="teleop_bag" args="-O $(find building_mapper)/rosbag /scan /tf /imu/data" />
+
 </launch>
