@@ -10,7 +10,7 @@ class WallAvoid(object):
     def __init__(self, timeout=None):
         rospy.init_node("WallAvoid")
 
-        self.turnCoef = [(x ** 2 + 8100) / 10000000.0 for x in range(-90, 0)] + [(x ** 2 - 8100) / 10000000.0 for x in range(0, 91)]
+        self.turnCoef = [(x ** 2 - 8100) / 10000000.0 for x in range(-90, 0)] + [(-x ** 2 + 8100) / 10000000.0 for x in range(0, 91)]
         self.speedCoef = [(-x ** 2 + 8100) / 10000000.0 for x in range(-90,91)]
 
         rospy.Subscriber("/scan", LaserScan, self.latestScan)
