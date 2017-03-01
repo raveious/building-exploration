@@ -56,6 +56,6 @@ class WallAvoid(object):
 # standard ros boilerplate
 if __name__ == "__main__":
     try:
-        run = WallAvoid(180) # seconds
+        run = WallAvoid(240) # seconds
     except rospy.ROSInterruptException:
         pass
