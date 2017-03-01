@@ -25,9 +25,15 @@ from sensor_msgs.msg import LaserScan
 
 # init Twist msg
 motion = Twist()
+start_time = time.time()
 
 # motion algorithm in Callback routine for Jackal motion
 def Callback(data):
+    current_time = time.time()
+
+    if (current_time - start_time) > 300:
+        rospy.signal_shutdown("Execution timer expired")
+    
     # len(data.ranges) = 180
     rospy.loginfo('left: %f  forward: %f  right: %f'%(data.ranges[-5], data.ranges[90], data.ranges[5]))
 
