@@ -1,10 +1,10 @@
 <launch>
   <include file="$(find building_mapper)/launch/jackal.launch" />
 
-  <!-- <node pkg="building_mapper" name="jackal_move" type="jackal_move.py"  output="screen" required="true"/> -->
+  <node pkg="building_mapper" name="jackal_move" type="jackal_move.py"  output="screen" required="true"/>
 
-  <node pkg="building_mapper" name="wall_avoid" type="wall_avoid.py" output="screen" required="true"/>
+  <!-- <node pkg="building_mapper" name="wall_avoid" type="wall_avoid.py" output="screen" required="true"/> -->
 
-  <node pkg="rosbag" type="record" name="explore_bag" args="-O $(find building_mapper)/rosbag /scan /tf /imu/data" />
+  <node pkg="rosbag" type="record" name="explore_bag" args="-o $(find building_mapper)/rosbag /scan /tf" />
 
 </launch>
