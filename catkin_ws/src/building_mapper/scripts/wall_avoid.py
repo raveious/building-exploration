@@ -46,8 +46,8 @@ class WallAvoid(object):
             turnVal = turnVal + (self.turnCoef[p] * data.ranges[p])
 
         cmd = Twist()
-        cmd.linear.x = min(speedVal * 1.1, 0.5)
-        cmd.angular.z = turnVal * -1.2
+        cmd.linear.x = min(speedVal * 1.2, 0.5) # sets max speed
+        cmd.angular.z = turnVal * 1.1
 
         rospy.loginfo(cmd)
 
