@@ -11,7 +11,7 @@
 #            Philip
 #            Akhil
 #
-# Revision: v1.3
+# Revision: v1.4
 
 # imports
 import rospy
@@ -23,86 +23,93 @@ import os
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
-# init Twist msg
-motion = Twist()
-start_time = time.time()
+# defining class for discrete movement algorithm
+class discrete_movement(object):
+    # define setup and run routine
+    def __init__(self, timeout=None):
 
-# motion algorithm in Callback routine for Jackal motion
-def Callback(data):
-    current_time = time.time()
+        self.motion = Twist()
+        self.start_time = time.time()
 
-    if (current_time - start_time) > 300:
-        rospy.signal_shutdown("Execution timer expired")
-    
-    # len(data.ranges) = 180
-    rospy.loginfo('left: %f  forward: %f  right: %f'%(data.ranges[-5], data.ranges[90], data.ranges[5]))
+        self.timeout = None
+        if timeout:
+            self.timeout = timeout
 
-    # move forward
-    motion.linear.x  = 0.5
-    motion.angular.z = 0.0
+        # create node for listening to twist messages
+        rospy.init_node("building_mapper")
 
-    # avoid right wall side
-    if data.ranges[10] < 1.0 :
-        motion.linear.x  = 0.2
-        motion.angular.z = 0.2
+        # subscribe to twist_key
+        rospy.Subscriber("/scan", LaserScan, self.Callback)
+        rate = rospy.Rate(5)
 
-    # avoid left wall side
-    if data.ranges[-10] < 1.0 :
-        motion.linear.x  = 0.2
-        motion.angular.z = -0.2
+        # publish to cmd_vel of the jackal
+        pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 
-    # sharp turn if right side too close
-    if data.ranges[2] < 0.5 :
-        motion.linear.x  = 0.1
-        motion.angular.z = 0.3
+        while not rospy.is_shutdown():
 
-    # sharp turn if left side too close
-    if data.ranges[-2] < 0.5 :
-        motion.linear.x  = 0.1
-        motion.angular.z = -0.3
+            # # push Twist msgs to override Callback algorithm
+            # self.motion.linear.x = -0.3
+            # self.motion.angular.z = 0.0
 
-    # slow down if forward wall too close
-    if data.ranges[90] < 1.5 :
-        motion.linear.x  = 0.3
-        motion.angular.z = 0.0
+            # publish Twist
+            pub.publish(self.motion)
 
-    # stop and turn at forward wall
-    if data.ranges[90] < 1.2 :
-        if data.ranges[10]<data.ranges[-10]:
-            motion.linear.x  = 0.0
-            motion.angular.z = 0.2
-        else:
-            motion.linear.x  = 0.0
-            motion.angular.z = -0.2
+            rate.sleep()
 
-# define setup and run routine
-def init():
-    global motion
-    # create node for listening to twist messages
-    rospy.init_node("building_mapper")
 
-    # subscribe to twist_key
-    rospy.Subscriber("/scan", LaserScan, Callback)
-    rate = rospy.Rate(5)
+    # motion algorithm in Callback routine for Jackal motion
+    def Callback(self, data):
+        current_time = time.time()
 
-    # publish to cmd_vel of the jackal
-    pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
+        if (current_time - self.start_time) > self.timeout:
+            rospy.signal_shutdown("Execution timer expired")
 
-    while not rospy.is_shutdown():
+        # len(data.ranges) = 180
+        rospy.loginfo('left: %f  forward: %f  right: %f'%(data.ranges[-8], data.ranges[90], data.ranges[8]))
 
-        # push Twist msgs to override Callback algorithm
-        # motion.linear.x = -0.3
-        # motion.angular.z = 0.0
+        # move forward
+        self.motion.linear.x  = 0.5
+        self.motion.angular.z = 0.0
 
-        # publish Twist
-        pub.publish(motion)
+        # avoid right wall side
+        if data.ranges[9] < 0.85 :
+            self.motion.linear.x  = 0.3
+            self.motion.angular.z = 0.25
 
-        rate.sleep()
+        # avoid left wall side
+        if data.ranges[-9] < 0.85 :
+            self.motion.linear.x  = 0.3
+            self.motion.angular.z = -0.25
+
+        # sharp turn if right side too close
+        if data.ranges[3] < 0.6 :
+            self.motion.linear.x  = 0.1
+            self.motion.angular.z = 0.3
+
+        # sharp turn if left side too close
+        if data.ranges[-3] < 0.6 :
+            self.motion.linear.x  = 0.1
+            self.motion.angular.z = -0.3
+
+        # slow down if forward wall too close
+        if data.ranges[90] < 1.5 :
+            self.motion.linear.x  = 0.3
+            self.motion.angular.z = 0.0
+
+        # stop and turn at forward wall
+        if data.ranges[90] < 1.2 :
+            if data.ranges[9]<data.ranges[-9]:
+                self.motion.linear.x  = 0.0
+                self.motion.angular.z = 0.2
+            else:
+                self.motion.linear.x  = -0.1
+                self.motion.angular.z = -0.3
 
 
 # standard ros boilerplate
 if __name__ == "__main__":
     try:
-        init()
+        run = discrete_movement(300) #timeout seconds
     except rospy.ROSInterruptException:
         pass
+
