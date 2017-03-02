@@ -10,48 +10,6 @@
 - Present a map of a floor on the EERC. Include this map on your github wiki page.
 - Demonstrate operation of your mapping program at a TBD location after presentations on March 1.
 
-## Exploration Algorithms
-
-During the course of this project, we developed two methods of interpreting movements for the Jackal which were both based on the SICK LIDAR lm2xx input. These algorithms are centered around the idea of following a wall around the building.
-
-### Discrete Wall Avoidence - by [Akhil Kurup](https://github.com/amkurup)
-Source: [jackal_move.py](catkin_ws/src/building_mapper/scripts/jackal_move.py)
-
-Uses scan data from the SICK-LMS200 to detect proximity from/to a wall and decide the next step to be taken. 3 major points are scanned: forward (90), left (170) and right (10). If the robot gets close to walls, the left and right points go below 0.9mtr and it turns the other way. If a wall is encountered dead ahead, it scans left and right and makes a decision to turn based on distance from obstacles.
-
-![Discrete Map](catkin_ws/src/building_mapper/maps/map_akhil.jpg "Resulting Map")
-
-> Advantages: fast
-
-> Disadvantages: crude, follows a zig-zag path, jerks
-
-<a href="https://www.youtube.com/watch?v=SlaGViP3a7M" target="_blank"><img src="https://img.youtube.com/vi/SlaGViP3a7M/mqdefault.jpg" border="1" /></a>
-
-### Continuous Wall Avoidence - by [Ian Wakely](https://github.com/raveious)
-Source: [wall_avoid.py](catkin_ws/src/building_mapper/scripts/wall_avoid.py)
-
-Uses quadratic functions to evaluate the importance of a particular range value read from the LIDAR and evaluates every points along the scan to come to a desired action of avoidence. It multiplies each of the range values by speed and turning coefficiencts and sums the results into a resulting turning and speed action.
-
-![speed graph](graphs/speed.jpg)
-
-When the area in front of the robot is more open, then it will increase its speed and slow down when it is less open for tight maneuvering.
-
-![turning graph](graphs/turning.jpg)
-
-When the area to the left is more occupied, turn right. When the right side is more occupied, turn left.
-
-![Continuous Map](catkin_ws/src/building_mapper/maps/map_ian.jpg "Resulting Map")
-
-> Advantages: Smooth turning and speed control
-
-> Disadvantages: Complex, slow
-
-<a href="https://www.youtube.com/watch?v=ek8rpRBjwkk" target="_blank"><img src="https://img.youtube.com/vi/ek8rpRBjwkk/mqdefault.jpg" border="1" /></a>
-
-<a href="https://www.youtube.com/watch?v=nWGagJHPpIU" target="_blank"><img src="https://img.youtube.com/vi/nWGagJHPpIU/mqdefault.jpg" border="1" /></a>
-
-# Development
-
 ## Completed Jackal connection Tutorial
 - [x] [Ian Wakely](https://github.com/raveious) (Project Leader)
 - [x] [Phillip Scramlin](https://github.com/pdscraml)
@@ -120,3 +78,47 @@ Name|Description
 [view_remote_robot](catkin_ws/src/building_mapper/launch/view_remote_robot.launch)|Allows for the viewing of the Jackal model and visualizes all of the additional sensor data. This is intended to be launched on your local machine **and the controllers should already be launched on the Jackal.**
 [view_robot](catkin_ws/src/building_mapper/launch/view_robot.launch)|Allows for the viewing of the Jackal model and visualizes all of the additional sensor data. This is intended to be launched on your local machine **and the controllers will be launched on your local machine.**
 [replay](catkin_ws/src/building_mapper/launch/replay.launch)|To be used for map creation. Launches gmapping with SLAM mapping and other configuration settings, followed by rviz. A python script is then launched for the playing back of rosbag data and map generation with map_saver. Intended to be run on local machine. Rosbag data must be copied from jackal after running exploration launch file.
+
+## Exploration Algorithms
+
+During the course of this project, we developed two methods of interpreting movements for the Jackal which were both based on the SICK LIDAR lm2xx input. These algorithms are centered around the idea of following a wall around the building.
+
+### Discrete Wall Avoidence
+By [Akhil Kurup](https://github.com/amkurup)
+Source: [jackal_move.py](catkin_ws/src/building_mapper/scripts/jackal_move.py)
+
+Uses scan data from the SICK-LMS200 to detect proximity from/to a wall and decide the next step to be taken. 3 major points are scanned: forward (90), left (170) and right (10). If the robot gets close to walls, the left and right points go below 0.9mtr and it turns the other way. If a wall is encountered dead ahead, it scans left and right and makes a decision to turn based on distance from obstacles.
+
+Resulting Map:
+![Discrete Map](catkin_ws/src/building_mapper/maps/map_akhil.jpg "Resulting Map")
+
+> Advantages: fast
+
+> Disadvantages: crude, follows a zig-zag path, jerks
+
+<a href="https://www.youtube.com/watch?v=SlaGViP3a7M" target="_blank"><img src="https://img.youtube.com/vi/SlaGViP3a7M/mqdefault.jpg" border="1" /></a>
+
+### Continuous Wall Avoidence
+By [Ian Wakely](https://github.com/raveious)
+Source: [wall_avoid.py](catkin_ws/src/building_mapper/scripts/wall_avoid.py)
+
+Uses quadratic functions to evaluate the importance of a particular range value read from the LIDAR and evaluates every points along the scan to come to a desired action of avoidence. It multiplies each of the range values by speed and turning coefficiencts and sums the results into a resulting turning and speed action.
+
+![speed graph](graphs/speed.jpg)
+
+When the area in front of the robot is more open, then it will increase its speed and slow down when it is less open for tight maneuvering.
+
+![turning graph](graphs/turning.jpg)
+
+When the area to the left is more occupied, turn right. When the right side is more occupied, turn left.
+
+Resulting Map:
+![Continuous Map](catkin_ws/src/building_mapper/maps/map_ian.jpg "Resulting Map")
+
+> Advantages: Smooth turning and speed control
+
+> Disadvantages: Complex, slow
+
+<a href="https://www.youtube.com/watch?v=ek8rpRBjwkk" target="_blank"><img src="https://img.youtube.com/vi/ek8rpRBjwkk/mqdefault.jpg" border="1" /></a>
+
+<a href="https://www.youtube.com/watch?v=nWGagJHPpIU" target="_blank"><img src="https://img.youtube.com/vi/nWGagJHPpIU/mqdefault.jpg" border="1" /></a>
