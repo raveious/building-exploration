@@ -26,7 +26,7 @@ $ catkin_make
 $ source devel/setup.bash
 ```
 
-## Viewing the robot model
+### Viewing the robot model
 
 Make sure to source all of setup scripts, this will setup all the paths for your local environment.
 
@@ -41,7 +41,7 @@ View the model via roslaunch and Rviz
 $ roslaunch building_mapper view_model.launch
 ```
 
-## Exploration with the Jackal
+### Exploration with the Jackal
 
 Once the Jackal is powered up and online, ssh into it and launch the exploration nodes.
 
@@ -66,7 +66,7 @@ $ source catkin_ws/devel/setup.bash
 $ roslaunch building_mapper view_remote_robot.launch
 ```
 
-## Launch files
+### Launch files
 
 Name|Description
 :---|:---:
