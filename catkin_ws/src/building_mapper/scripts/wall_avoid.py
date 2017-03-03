@@ -13,6 +13,9 @@ class WallAvoid(object):
         self.turnCoef = [(x ** 2 - 8100) / 10000000.0 for x in range(-90, 0)] + [(-x ** 2 + 8100) / 10000000.0 for x in range(0, 91)]
         self.speedCoef = [(-x ** 2 + 8100) / 10000000.0 for x in range(-90,91)]
 
+        self.last_speed = 0
+        self.last_turn = 0
+
         rospy.Subscriber("/scan", LaserScan, self._latestScan)
         self.pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 
@@ -46,7 +49,7 @@ class WallAvoid(object):
         # If average is really REALLY close, might want to back up instead
         if front_zone_avg < 1.5 or min(front_zone) < 0.8:
             speedVal = -0.1
-            if left_zone_avg > right_zone_avg and min(left_zone) > min(right_zone):
+            if last_turn > 0
                 rospy.loginfo("Backing up to the left...")
                 turnVal = 0.5
             else:
@@ -76,6 +79,9 @@ class WallAvoid(object):
         cmd = Twist()
         cmd.linear.x = speedVal
         cmd.angular.z = turnVal
+
+        self.last_speed = speedVal
+        self.last_turn = turnVal
 
         rospy.loginfo(cmd)
 
