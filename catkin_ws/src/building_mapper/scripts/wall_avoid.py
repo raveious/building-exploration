@@ -43,7 +43,7 @@ class WallAvoid(object):
         # If average is really REALLY close, might want to back up instead
         if front_zone_avg < 1.5 or min(front_zone) < 0.8:
             speedVal = -0.1
-            if left_zone_avg > right_zone_avg:
+            if left_zone_avg > right_zone_avg and min(left_zone) > min(right_zone):
                 rospy.loginfo("Backing up to the left...")
                 turnVal = 0.5
             else:
@@ -63,8 +63,8 @@ class WallAvoid(object):
                     # Turn away from walls
                     turnVal = turnVal + (self.turnCoef[p] * data.ranges[p])
 
-            speedVal = min(speedVal * 1.2, 0.45) # sets max speed
-            turnVal = turnVal * 1.2
+            speedVal = min(speedVal * 1.2, 0.4) # sets max speed
+            turnVal = turnVal * 1.4
 
         cmd = Twist()
         cmd.linear.x = speedVal
