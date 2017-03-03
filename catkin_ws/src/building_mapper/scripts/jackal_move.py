@@ -124,7 +124,7 @@ class discrete_movement(object):
             self.motion.linear.x = 0.2
             self.motion.angular.z = -0.2
             rospy.loginfo('turn right')
-      
+
         if min(data.ranges[75:105]) < 0.6 :
             self.motion.linear.x = -0.2
             self.motion.angular.z = -0.3
@@ -133,7 +133,6 @@ class discrete_movement(object):
 # standard ros boilerplate
 if __name__ == "__main__":
     try:
-        run = discrete_movement(30) #timeout seconds
+        run = discrete_movement(600) #timeout seconds
     except rospy.ROSInterruptException:
         pass
-
