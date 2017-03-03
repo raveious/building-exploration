@@ -42,7 +42,7 @@ class joy_control(object):
 
         self.ready = False
         self.trigger = False
-        self.explore_mode = 0
+        self.explore_mode = 1
         explore_process = None
         rosbag_process = None
         timer_start = 0
@@ -52,7 +52,7 @@ class joy_control(object):
             if (self.trigger == True) and :
 
                 if self.ready == True:
-                    
+
                     package ='rosbag'
                     executable ='record'
 
