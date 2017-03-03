@@ -69,15 +69,15 @@ class joy_control(object):
                         # run = jackal_move.discrete_movement(runtime)
                         package = 'building_mapper'
                         executable = 'jackal_move.py'
-                        launch = roslaunch.scriptapi.ROSLaunch()
-                        launch.start()
-                        explore_process = launch.launch(node)
+                    launch = roslaunch.scriptapi.ROSLaunch()
+                    launch.start()
+                    explore_process = launch.launch(node)
                 else:
                     rospy.loginfo("Stopping rosbag record")
                     # rosbag_process.stop()
                     explore_process.stop()
                 self.trigger = False
-            rate.sleep()
+            #rate.sleep()
 
     def joy_callback(self, data):
 
