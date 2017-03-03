@@ -100,8 +100,8 @@ class discrete_movement(object):
                self.motion.angular.z = 0.25
                rospy.logdebug('stop and turn left')
            else:
-               self.motion.linear.x  = -0.15
-               self.motion.angular.z = -0.35
+               self.motion.linear.x  = -0.2
+               self.motion.angular.z = -0.4
                rospy.logdebug(' backup and turn right')
 
 
