@@ -70,7 +70,8 @@ class WallAvoid(object):
             turnVal = turnVal * 1.4
 
             if front_zone_avg < 2.0:
-                turnVal = turnVal * 1.5
+                turnVal = turnVal * 2.0
+                speedVal = speedVal * 1.1
 
         cmd = Twist()
         cmd.linear.x = speedVal
@@ -83,6 +84,6 @@ class WallAvoid(object):
 # standard ros boilerplate
 if __name__ == "__main__":
     try:
-        run = WallAvoid(600) # seconds
+        run = WallAvoid() # seconds
     except rospy.ROSInterruptException:
         pass
