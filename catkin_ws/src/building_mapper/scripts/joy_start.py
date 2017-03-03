@@ -35,66 +35,72 @@ from sensor_msgs.msg import Joy
 
 class joy_control(object):
 
-    def __init__(self, arg):
+    def __init__(self):
 
-        self.argin = arg
-        rate = rospy.Rate(1)
+        #self.argin = arg
+        runtime = 10
+        rate = rospy.Rate(5)
         rospy.Subscriber("/bluetooth_teleop/joy", Joy, self.joy_callback)
 
         self.ready = False
-
+        self.trigger = False
+        self.explore_mode = 0
         rospy.loginfo("In start")
         while not rospy.is_shutdown():
-        #rospy.spin()
+            if self.trigger == True:
+
+                if self.ready == True:
+                    #
+                    # package ='rosbag'
+                    # executable ='record'
+                    #
+                    # node = roslaunch.core.Node(package, executable, args=str(os.path.dirname(os.path.realpath(__file__)))[:-7]+"rosbag/rosbag.bag")
+                    #
+                    # launch = roslaunch.scriptapi.ROSLaunch()
+                    # launch.start()
+                    #
+                    # rosbag_process = launch.launch(node)
+                    #
+                    if explore_mode == 0:
+                        # run = wall_avoid.WallAvoid(runtime)
+                        package = 'building_mapper'
+                        executable = 'wall_avoid.py'
+                    else:
+                        # run = jackal_move.discrete_movement(runtime)
+                        package = 'building_mapper'
+                        executable = 'jackal_move.py'
+                        launch = roslaunch.scriptapi.ROSLaunch()
+                        launch.start()
+                        explore_process = launch.launch(node)
+                else:
+                    rospy.loginfo("Stopping rosbag record")
+                    # rosbag_process.stop()
+                    explore_process.stop()
+                self.trigger = False
             rate.sleep()
 
     def joy_callback(self, data):
 
-        runtime = 10
-        x, circle, sq, tri, L1, R1, share, options, p4, L3, R3, DL, DR, DU, DD = data.buttons
+        x, circ, sq, tri, L1, R1, share, options, p4, L3, R3, DL, DR, DU, DD = data.buttons
         llr, lud, L2, rlr, rud, R2 = data.axes
 
         if (x == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.ready == False):
-
             rospy.loginfo("Controller code received, commencing exploration protocol...")
+            self.trigger = True
             self.ready = True
-                #
-                # package ='rosbag'
-                # executable ='record'
-                #
-                # node = roslaunch.core.Node(package, executable, args=str(os.path.dirname(os.path.realpath(__file__)))[:-7]+"rosbag/rosbag.bag")
-                #
-                # launch = roslaunch.scriptapi.ROSLaunch()
-                # launch.start()
-                #
-                # process = launch.launch(node)
-                #
-            if arg == 0:
-                run = wall_avoid.WallAvoid(runtime)
-            else:
-                run = jackal_move.discrete_movement(runtime)
-                #
-                # process.stop()
 
-                # if y == 0:
-                #     package = 'building_mapper'
-                #     executable = 'wall_avoid.py'
-                # else:
-                #     package = 'building_mapper'
-                #     executable = 'jackal_move.py'
-                # node = roslaunch.core.Node(package, executable)
-                #
-                # launch = roslaunch.scriptapi.ROSLaunch()
-                # launch.start()
-                #
-                # process = launch.launch(node)
-                # print process.is_alive()
-                # process.stop()
-                #
-                #
         if (tri == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.ready == True):
             rospy.loginfo("Controller code received, terminating exploration protocol...")
+            self.trigger = True
             self.ready = False
+
+        if (sq == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.explore_mode == 1):
+            rospy.loginfo("Switching to wall_avoid algorithm...")
+            self.explore_mode = 0
+
+        if (circ == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.explore_mode == 0):
+            rospy.loginfo("Switching to jackal_move algorithm...")
+            self.explore_mode = 1
         # rospy.sleep(1)
 
 
@@ -104,9 +110,9 @@ if __name__ == "__main__":
     #
     #  else:
     #      x = "0"  #no input, use default startup
-    arg = 0
+
     try:
         rospy.init_node("joy_start", anonymous=False)
-        run = joy_control(arg)  #read in joystick input
+        run = joy_control()  #read in joystick input
     except rospy.ROSInterruptException:
         rospy.loginfo("joy_start node terminated.")
