@@ -41,7 +41,7 @@ View the model via roslaunch and Rviz
 $ roslaunch building_mapper view_model.launch
 ```
 
-### Exploration with the Jackal
+## Exploration with the Jackal
 
 Once the Jackal is powered up and online, ssh into it and launch the exploration nodes.
 
@@ -50,6 +50,7 @@ $ ssh jackal2
 $ cd building-exploration/catkin_ws
 $ git pull
 $ source devel/setup.bash
+$ source remote-jackal.sh
 $ roslaunch building_mapper exploration.launch
 ```
 
@@ -66,7 +67,38 @@ $ source catkin_ws/devel/setup.bash
 $ roslaunch building_mapper view_remote_robot.launch
 ```
 
-### Launch files
+## Exploration with the Jackal without Wireless Access
+
+Once the Jackal is powered up and online, ssh into it and launch the joystick controller sequence.
+
+```
+$ ssh jackal2
+$ cd building-exploration/catkin_ws
+$ git pull
+$ source devel/setup.bash
+$ source remote-jackal.sh
+$ roslaunch building_mapper joy_start.launch
+```
+
+After the Jackal has been started, feel free to drive it to the testing area. Once there, select one of the key combinations on the controller to issue commands.
+
+Key Combination|Sent Command
+:---:|:---:
+L2 + R2 + Square|Select discrete algorithm
+L2 + R2 + Circle|Select continuous algorithm
+L2 + R2 + Triangle|Stop exploration
+L2 + R2 + X|Start exploration
+
+## Handling ROSBAGs
+
+After running the launch files, a rosbag.bag file would be created in the rosbag directory. Make sure to copy it to the local machine (using scp or some other method) to avoid overwriting of the bag file. While launching the replay.launch file to map the bag, make sure to have the correct bag file in the rosbag directory with the name rosbag.bag.
+
+*Note: If the bag has a .active extention, it implies that the bag was left active when the node/robot was shutdown. At this point a reindexing will be needed to recover the bag.
+```
+$ rosbag reindex rosbag.bag
+```
+
+## Launch files
 
 Name|Description
 :---|:---:
@@ -78,12 +110,4 @@ Name|Description
 [view_remote_robot](catkin_ws/src/building_mapper/launch/view_remote_robot.launch)|Allows for the viewing of the Jackal model and visualizes all of the additional sensor data. This is intended to be launched on your local machine **and the controllers should already be launched on the Jackal.**
 [view_robot](catkin_ws/src/building_mapper/launch/view_robot.launch)|Allows for the viewing of the Jackal model and visualizes all of the additional sensor data. This is intended to be launched on your local machine **and the controllers will be launched on your local machine.**
 [replay](catkin_ws/src/building_mapper/launch/replay.launch)|To be used for map creation. Launches gmapping with SLAM mapping and other configuration settings, followed by rviz. A python script is then launched for the playing back of rosbag data and map generation with map_saver. Intended to be run on local machine. Rosbag data must be copied from jackal after running exploration launch file.
-
-## Handling ROSBAGs
-
-After running the launch files, a rosbag.bag file would be created in the rosbag directory. Make sure to copy it to the local machine (using scp or some other method) to avoid overwriting of the bag file. While launching the replay.launch file to map the bag, make sure to have the correct bag file in the rosbag directory with the name rosbag.bag.
-
-*Note: If the bag has a .active extention, it implies that the bag was left active when the node/robot was shutdown. At this point a reindexing will be needed to recover the bag.
-```
-$ rosbag reindex rosbag.bag
-```
+[joy_start](catkin_ws/src/building_mapper/launch/joy_start.launch)|This is intended for the cases where the Jackal can not be accessed wirelessly. This allows for you to launch the Jackal and then drive it to where you want to conduct testing. The tests are then started by using keys on the controller.
