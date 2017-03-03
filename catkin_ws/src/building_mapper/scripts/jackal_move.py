@@ -26,14 +26,10 @@ from sensor_msgs.msg import LaserScan
 # defining class for discrete movement algorithm
 class discrete_movement(object):
     # define setup and run routine
-    def __init__(self, timeout=None):
+    def __init__(self):
 
         self.motion = Twist()
         self.start_time = time.time()
-
-        self.timeout = None
-        if timeout:
-            self.timeout = timeout
 
         # create node for listening to twist messages
         rospy.init_node("building_mapper")
@@ -113,9 +109,10 @@ class discrete_movement(object):
                self.motion.angular.z = -0.35
                rospy.logdebug(' backup and turn right')
 
+
 # standard ros boilerplate
 if __name__ == "__main__":
     try:
-        run = discrete_movement(600) #timeout seconds
+        run = discrete_movement()
     except rospy.ROSInterruptException:
         pass
