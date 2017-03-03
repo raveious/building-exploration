@@ -26,6 +26,9 @@ class WallAvoid(object):
 
         rospy.spin()
 
+    def isTimedout(self):
+        return self.timeout <= time.time()
+
     def _latestScan(self, data):
         if self.timeout <= time.time():
             rospy.signal_shutdown("Execution timer expired")
