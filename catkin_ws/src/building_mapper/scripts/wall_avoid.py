@@ -30,7 +30,7 @@ class WallAvoid(object):
         return self.timeout <= time.time()
 
     def _latestScan(self, data):
-        if self.timeout <= time.time():
+        if self.timeout and self.timeout <= time.time():
             rospy.signal_shutdown("Execution timer expired")
 
         turnVal = 0
