@@ -37,31 +37,33 @@ class joy_control(object):
 
     def __init__(self):
 
-        #self.argin = arg
-        runtime = 10
         rate = rospy.Rate(5)
         rospy.Subscriber("/bluetooth_teleop/joy", Joy, self.joy_callback)
 
         self.ready = False
         self.trigger = False
-        self.explore_mode = 0
+        self.explore_mode = 1
+        explore_process = None
+        rosbag_process = None
+        timer_start = 0
         rospy.loginfo("In start")
+
         while not rospy.is_shutdown():
-            if self.trigger == True:
+            if (self.trigger == True) and :
 
                 if self.ready == True:
-                    #
-                    # package ='rosbag'
-                    # executable ='record'
-                    #
-                    # node = roslaunch.core.Node(package, executable, args=str(os.path.dirname(os.path.realpath(__file__)))[:-7]+"rosbag/rosbag.bag")
-                    #
-                    # launch = roslaunch.scriptapi.ROSLaunch()
-                    # launch.start()
-                    #
-                    # rosbag_process = launch.launch(node)
-                    #
-                    if explore_mode == 0:
+
+                    package ='rosbag'
+                    executable ='record'
+
+                    node = roslaunch.core.Node(package, executable, args="-O "+str(os.path.dirname(os.path.realpath(__file__)))[:-7]+"rosbag/rosbag /tf /scan")
+
+                    launch = roslaunch.scriptapi.ROSLaunch()
+                    launch.start()
+
+                    rosbag_process = launch.launch(node)
+
+                    if self.explore_mode == 0:
                         # run = wall_avoid.WallAvoid(runtime)
                         package = 'building_mapper'
                         executable = 'wall_avoid.py'
@@ -69,12 +71,13 @@ class joy_control(object):
                         # run = jackal_move.discrete_movement(runtime)
                         package = 'building_mapper'
                         executable = 'jackal_move.py'
+                    node = roslaunch.core.Node(package, executable)
                     launch = roslaunch.scriptapi.ROSLaunch()
                     launch.start()
                     explore_process = launch.launch(node)
                 else:
                     rospy.loginfo("Stopping rosbag record")
-                    # rosbag_process.stop()
+                    rosbag_process.stop()
                     explore_process.stop()
                 self.trigger = False
             #rate.sleep()
@@ -84,32 +87,28 @@ class joy_control(object):
         x, circ, sq, tri, L1, R1, share, options, p4, L3, R3, DL, DR, DU, DD = data.buttons
         llr, lud, L2, rlr, rud, R2 = data.axes
 
+        # Start exploration
         if (x == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.ready == False):
             rospy.loginfo("Controller code received, commencing exploration protocol...")
             self.trigger = True
             self.ready = True
-
+        # Stop exploration
         if (tri == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.ready == True):
             rospy.loginfo("Controller code received, terminating exploration protocol...")
             self.trigger = True
             self.ready = False
-
+        # Switch to wall_avoid
         if (sq == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.explore_mode == 1):
-            rospy.loginfo("Switching to wall_avoid algorithm...")
+            rospy.loginfo("Switching to continuous  algorithm...")
             self.explore_mode = 0
-
+        # Switching to jackal_move
         if (circ == 1) and (L2 < 0.9) and (R2 < 0.9) and (self.explore_mode == 0):
-            rospy.loginfo("Switching to jackal_move algorithm...")
+            rospy.loginfo("Switching to discrete algorithm...")
             self.explore_mode = 1
         # rospy.sleep(1)
 
 
 if __name__ == "__main__":
-    #  if len(sys.argv) > 1:
-    #      x = sys.argv[1]
-    #
-    #  else:
-    #      x = "0"  #no input, use default startup
 
     try:
         rospy.init_node("joy_start", anonymous=False)

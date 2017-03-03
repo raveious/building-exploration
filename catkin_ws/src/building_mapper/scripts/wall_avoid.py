@@ -69,6 +69,9 @@ class WallAvoid(object):
             speedVal = min(speedVal * 1.2, 0.4) # sets max speed
             turnVal = turnVal * 1.4
 
+            if front_zone_avg < 2.0:
+                turnVal = turnVal * 1.5
+
         cmd = Twist()
         cmd.linear.x = speedVal
         cmd.angular.z = turnVal
