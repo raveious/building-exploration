@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find building_mapper)/launch/jackal.launch" />
+   <!--replay-->
+  <node pkg="building_mapper" name="joy_start"  type="joy_start.py" output="screen" required="true" />
+
+</launch>
