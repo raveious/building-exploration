@@ -84,8 +84,8 @@ After the Jackal has been started, feel free to drive it to the testing area. On
 
 Key Combination|Sent Command
 :---:|:---:
-L2 + R2 + Square|Select discrete algorithm
-L2 + R2 + Circle|Select continuous algorithm
+L2 + R2 + Square|Select discrete algorithm ([Known Issues](https://github.com/raveious/building-exploration/wiki#known-issues))
+L2 + R2 + Circle|Select continuous algorithm ([Known Issues](https://github.com/raveious/building-exploration/wiki#known-issues-1))
 L2 + R2 + Triangle|Stop exploration
 L2 + R2 + X|Start exploration
 
