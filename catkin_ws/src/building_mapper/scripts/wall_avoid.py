@@ -49,7 +49,7 @@ class WallAvoid(object):
         # If average is really REALLY close, might want to back up instead
         if front_zone_avg < 1.5 or min(front_zone) < 0.8:
             speedVal = -0.1
-            if last_turn > 0
+            if last_turn > 0:
                 rospy.loginfo("Backing up to the left...")
                 turnVal = 0.5
             else:
