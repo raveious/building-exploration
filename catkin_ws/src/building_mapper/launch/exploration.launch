@@ -5,6 +5,6 @@
 
   <!-- <node pkg="building_mapper" name="wall_avoid" type="wall_avoid.py" output="screen" required="true"/> -->
 
-  <node pkg="rosbag" type="record" name="explore_bag" args="-o $(find building_mapper)/rosbag /scan /tf" />
+  <node pkg="rosbag" type="record" name="explore_bag" args="-O $(find building_mapper)/rosbag/rosbag /scan /tf" />
 
 </launch>
