@@ -32,18 +32,23 @@ class WallAvoid(object):
 
         turnVal = 0
         speedVal = 0
-        front_zone = sum(data.ranges[70:110]) / len(data.ranges[70:110])
-        left_zone = sum(data.ranges[110:180]) / len(data.ranges[110:180])
-        right_zone = sum(data.ranges[0:70]) / len(data.ranges[0:70])
+        right_zone = data.ranges[0:65]
+        front_zone = data.ranges[65:115]
+        left_zone = data.ranges[115:180]
+
+        front_zone_avg = sum(front_zone) / len(front_zone)
+        right_zone_avg = sum(right_zone) / len(right_zone)
+        left_zone_avg = sum(left_zone) / len(left_zone)
 
         # If average is really REALLY close, might want to back up instead
-        if front_zone < 1.5:
-            rospy.loginfo("Backing up")
+        if front_zone_avg < 1.5 or min(front_zone) < 0.8:
             speedVal = -0.1
-            if left_zone > right_zone:
+            if left_zone_avg > right_zone_avg:
+                rospy.loginfo("Backing up to the left...")
                 turnVal = 0.5
             else:
-                turnVal = -0.5
+                rospy.loginfo("Backing up to the right...")
+                turnVal = -0.3
 
         else:
             rospy.loginfo("Normal hallway")
@@ -58,9 +63,12 @@ class WallAvoid(object):
                     # Turn away from walls
                     turnVal = turnVal + (self.turnCoef[p] * data.ranges[p])
 
+            speedVal = min(speedVal * 1.2, 0.45) # sets max speed
+            turnVal = turnVal * 1.2
+
         cmd = Twist()
-        cmd.linear.x = min(speedVal * 1.2, 0.45) # sets max speed
-        cmd.angular.z = turnVal * 1.2
+        cmd.linear.x = speedVal
+        cmd.angular.z = turnVal
 
         rospy.loginfo(cmd)
 
