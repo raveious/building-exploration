@@ -62,42 +62,42 @@ class discrete_movement(object):
         self.motion.linear.x  = 0.5
         self.motion.angular.z = 0.0
 
-        avoid right wall side
-        if data.ranges[8] < 0.85 :
+        # avoid right wall side
+        if data.ranges[8] < 0.9 :
            self.motion.linear.x  = 0.3
-           self.motion.angular.z = 0.25
+           self.motion.angular.z = 0.3
            rospy.logdebug('soft left turn')
 
-        avoid left wall side
-        if data.ranges[-8] < 0.85 :
+        # avoid left wall side
+        if data.ranges[-8] < 0.9 :
            self.motion.linear.x  = 0.3
-           self.motion.angular.z = -0.25
+           self.motion.angular.z = -0.3
            rospy.logdebug(' soft right turn')
 
-        sharp turn if right side too close
+        # sharp turn if right side too close
         if data.ranges[8] < 0.4 :
-           self.motion.linear.x  = 0.15
+           self.motion.linear.x  = 0.1
            self.motion.angular.z = 0.4
            rospy.logdebug('hard left turn')
 
-        sharp turn if left side too close
+        # sharp turn if left side too close
         if data.ranges[-8] < 0.4 :
-           self.motion.linear.x  = 0.15
+           self.motion.linear.x  = 0.1
            self.motion.angular.z = -0.4
            rospy.logdebug('  hard right turn')
 
-        slow down if forward wall too close
+        # slow down if forward wall too close
         if data.ranges[90] < 1.5 :
            self.motion.linear.x  = 0.3
            self.motion.angular.z = 0.0
            rospy.logdebug('slow down, wall ahead')
 
-        stop and turn at forward wall
+        # stop and turn at forward wall
         if data.ranges[90] < 1.2 :
-            if right side obstacle is closer than left
+           # if right side obstacle is closer than left
            if data.ranges[9] < data.ranges[-9]:
                self.motion.linear.x  = 0.0
-               self.motion.angular.z = 0.2
+               self.motion.angular.z = 0.25
                rospy.logdebug('stop and turn left')
            else:
                self.motion.linear.x  = -0.15
