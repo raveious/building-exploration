@@ -49,7 +49,7 @@ class joy_control(object):
         rospy.loginfo("In start")
 
         while not rospy.is_shutdown():
-            if (self.trigger == True) and :
+            if (self.trigger == True):
 
                 if self.ready == True:
 
