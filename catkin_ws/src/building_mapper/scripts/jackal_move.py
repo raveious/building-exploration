@@ -29,7 +29,6 @@ class discrete_movement(object):
     def __init__(self):
 
         self.motion = Twist()
-        self.start_time = time.time()
 
         # create node for listening to twist messages
         rospy.init_node("building_mapper")
@@ -55,10 +54,6 @@ class discrete_movement(object):
 
     # motion algorithm in Callback routine for Jackal motion
     def Callback(self, data):
-        current_time = time.time()
-
-        if (current_time - self.start_time) > self.timeout:
-            rospy.signal_shutdown("Execution timer expired")
 
         # len(data.ranges) = 180
         rospy.logdebug('left: %f  forward: %f  right: %f'%(data.ranges[-8], data.ranges[90], data.ranges[8]))
